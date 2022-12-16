@@ -8,6 +8,8 @@ module.exports = {
         "@typescript-eslint/no-empty-function": "off",
         "react/no-find-dom-node": "off",
         "react/no-deprecated": "warn",
-        "no-undef": "off"
+        "no-undef": "off",
+        "react/display-name": "off",
+        "@typescript-eslint/camelcase": "off",
     }
 };
