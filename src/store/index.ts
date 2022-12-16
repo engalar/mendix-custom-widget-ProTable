@@ -1,5 +1,5 @@
 import { configure, makeObservable, when } from "mobx";
-import { CascaderContainerProps } from "../../typings/CascaderProps";
+import { ProTableContainerProps } from "../../typings/ProTableProps";
 
 configure({ enforceActions: "observed", isolateGlobalState: true, useProxies: "never" });
 
@@ -10,7 +10,7 @@ export class Store {
      */
     public dispose() {}
 
-    constructor(public mxOption: CascaderContainerProps) {
+    constructor(public mxOption: ProTableContainerProps) {
         makeObservable(this, {});
 
         when(

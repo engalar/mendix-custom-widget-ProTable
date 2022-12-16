@@ -1,6 +1,6 @@
 {
-  "name": "cascader",
-  "widgetName": "Cascader",
+  "name": "protable",
+  "widgetName": "ProTable",
   "version": "1.1.1",
   "description": "Template repo for legacy custome wiget",
   "copyright": "2021 Mendix",
@@ -30,7 +30,7 @@
     "generateTypings": "gulp generateTypings --gulpfile script/gulp.js",
     "openTestProject": "start tests/testProject/testProject.mpr",
     "backupTestProject": "cmd /c (if not exist dummy\\deployment\\data\\database\\hsqldb\\default (mkdir dummy\\deployment\\data\\database\\hsqldb\\default) else (echo skip 1)) && (if not exist dummy\\widgets (mkdir dummy\\widgets) else (echo skip 2)) && copy tests\\testProject\\testProject.mpr dummy\\ /Y && copy tests\\testProject\\deployment\\data\\database\\hsqldb\\default\\default.script dummy\\deployment\\data\\database\\hsqldb\\default\\",
-    "postbackupTestProject": "cmd /c copy tests\\testProject\\widgets\\com.mendix.widget.custom.Cascader.mpk dummy\\widgets\\",
+    "postbackupTestProject": "cmd /c copy tests\\testProject\\widgets\\com.mendix.widget.custom.ProTable.mpk dummy\\widgets\\",
     "restoreTestProject": "cmd /c xcopy dummy tests\\testProject /E /Y"
   },
   "license": "Apache-2.0",
@@ -62,6 +62,8 @@
     "webpack-bundle-analyzer": "^3.6.0"
   },
   "dependencies": {
+    "@ant-design/pro-components": "2.3.47",
+    "antd": ">=4.23.0",
     "ahooks": "^3.7.1",
     "@bem-react/classname": "^1.5.6",
     "@jeltemx/mendix-react-widget-utils": "^0.9.0",
