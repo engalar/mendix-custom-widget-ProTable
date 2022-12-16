@@ -6,11 +6,62 @@
     <description>ProTable for Mendix</description>
     <icon></icon>
     <properties>
-        <propertyGroup caption="通用">
-            <property key="myString" type="string" required="false" multiline="false">
-                <caption>String</caption>
-                <description></description>
-            </property>
+        <propertyGroup caption="数据源">
+            <propertyGroup caption="通用">
+                <property key="nodeEntity" type="entity" required="true" allowNonPersistableEntities="true">
+                    <caption>实体</caption>
+                    <description></description>
+                </property>
+            </propertyGroup>
+            <propertyGroup caption="方式">
+                <property key="nodeDataSource" type="enumeration" defaultValue="xpath">
+                    <caption>Data Source</caption>
+                    <description>选择如何加载数据</description>
+                    <enumerationValues>
+                        <enumerationValue key="xpath">XPath</enumerationValue>
+                        <enumerationValue key="microflow">微流</enumerationValue>
+                        <enumerationValue key="nanoflow">纳流</enumerationValue>
+                    </enumerationValues>
+                </property>
+                <property key="nodeConstraint" required="false" type="entityConstraint" entityProperty="nodeEntity">
+                    <caption>约束XPath</caption>
+                    <description>约束数据行的XPath</description>
+                </property>
+                <property key="nodeGetDataMicroflow" type="microflow" required="false">
+                    <caption>微流</caption>
+                    <description>Choose 'Microflow' in Data Source and choose a microflow here</description>
+                    <returnType type="Object" isList="true" entityProperty="nodeEntity" />
+                </property>
+                <property key="nodeGetDataNanoflow" type="nanoflow" required="false">
+                    <caption>纳流</caption>
+                    <description>Choose 'Nanoflow' in Data Source and choose a nanoflow here.</description>
+                    <returnType type="Object" isList="true" entityProperty="nodeEntity" />
+                </property>
+            </propertyGroup>
+            <propertyGroup caption="表格列配置">
+                <property key="columns" type="object" isList="true">
+                    <caption>表格列</caption>
+                    <description></description>
+                    <properties>
+                        <propertyGroup caption="通用">
+                            <property key="columnTitle" type="string" required="true" defaultValue="" multiline="false">
+                                <caption>列标题</caption>
+                                <description></description>
+                            </property>
+                            <property key="columnAttribute" type="attribute" entityProperty="../nodeEntity" required="true" isPath="no">
+                                <caption>列数据</caption>
+                                <description></description>
+                                <attributeTypes>
+                                    <attributeType name="String" />
+                                    <attributeType name="Boolean" />
+                                    <attributeType name="Enum" />
+                                    <attributeType name="DateTime" />
+                                </attributeTypes>
+                            </property>
+                        </propertyGroup>
+                    </properties>
+                </property>
+            </propertyGroup>
         </propertyGroup>
     </properties>
 </widget>

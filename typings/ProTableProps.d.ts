@@ -4,6 +4,7 @@
  * @author Mendix Widgets Team
  */
 import { CSSProperties } from "react";
+import { ActionPreview } from "@mendix/pluggable-widgets-typing-generator/dist/typings";
 import { EditableValue } from "mendix";
 
 interface CommonProps {
@@ -19,18 +20,49 @@ interface CommonProps {
     style: string;
 }
 
-interface _W {
-    myString: string;
+export type NodeDataSourceEnum = "xpath" | "microflow" | "nanoflow";
+
+export interface ColumnsType {
+    columnTitle: string;
+    columnAttribute: EditableValue<string | boolean | Date>;
 }
 
-export interface ProTableContainerProps extends CommonProps, _W {}
+export interface ColumnsPreviewType {
+    columnTitle: string;
+    columnAttribute: string;
+}
 
-export interface ProTablePreviewProps extends _W {
+export interface ColumnsVisibilityType {
+    columnTitle: boolean;
+    columnAttribute: boolean;
+}
+
+export interface ProTableContainerProps extends CommonProps {
+    nodeEntity: any;
+    nodeDataSource: NodeDataSourceEnum;
+    nodeConstraint?: any;
+    nodeGetDataMicroflow?: any;
+    nodeGetDataNanoflow?: any;
+    columns: ColumnsType[];
+}
+
+export interface ProTablePreviewProps {
     class: string;
     style: string;
     styleObject: CSSProperties;
+    nodeEntity: any;
+    nodeDataSource: NodeDataSourceEnum;
+    nodeConstraint?: any;
+    nodeGetDataMicroflow?: any;
+    nodeGetDataNanoflow?: any;
+    columns: ColumnsPreviewType[];
 }
 
 export interface VisibilityMap {
-    [P in _W]: boolean;
+    nodeEntity: boolean;
+    nodeDataSource: boolean;
+    nodeConstraint: boolean;
+    nodeGetDataMicroflow: boolean;
+    nodeGetDataNanoflow: boolean;
+    columns: ColumnsVisibilityType[] | boolean;
 }
