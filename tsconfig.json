@@ -11,6 +11,8 @@
       "./node_modules/@engalar"
     ],
     "resolveJsonModule": true,
-    "useDefineForClassFields": true
+    "noUnusedLocals": false,
+    "useDefineForClassFields": true,
+    "skipLibCheck": true
   }
 }

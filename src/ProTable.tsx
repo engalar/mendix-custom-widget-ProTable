@@ -7,6 +7,7 @@ import "./ui/index.scss";
 import { Observer } from "mobx-react";
 import { Store } from "./store";
 import { useUnmount } from "ahooks";
+import Demo from "./components/demo";
 
 const parseStyle = (style = ""): { [key: string]: string } => {
     try {
@@ -35,5 +36,13 @@ export default function ProTable(props: ProTableContainerProps) {
         store.dispose();
     });
 
-    return <Observer>{() => <div className={props.class} style={parseStyle(props.style)}></div>}</Observer>;
+    return (
+        <Observer>
+            {() => (
+                <div className={props.class} style={parseStyle(props.style)}>
+                    <Demo></Demo>
+                </div>
+            )}
+        </Observer>
+    );
 }
