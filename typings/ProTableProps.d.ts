@@ -24,7 +24,7 @@ export type NodeDataSourceEnum = "xpath" | "microflow" | "nanoflow";
 
 export interface ColumnsType {
     columnTitle: string;
-    columnAttribute: EditableValue<string | boolean | Date>;
+    columnAttribute: string;
 }
 
 export interface ColumnsPreviewType {
