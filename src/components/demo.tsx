@@ -44,7 +44,7 @@ const defaultData: DataSourceType[] = [
 
 export default () => {
     const [editableKeys, setEditableRowKeys] = useState<React.Key[]>([]);
-    const [dataSource, setDataSource] = useState<readonly DataSourceType[]>([]);
+    const [dataSource, setDataSource] = useState<readonly DataSourceType[]>(defaultData);
     const [position, _setPosition] = useState<"top" | "bottom" | "hidden">("top");
 
     const columns: ProColumns<DataSourceType>[] = [
@@ -144,9 +144,9 @@ export default () => {
             recordCreatorProps={
                 position !== "hidden"
                     ? {
-                          position: position as "top",
-                          record: () => ({ id: (Math.random() * 1000000).toFixed(0) })
-                      }
+                        position: position as "top",
+                        record: () => ({ id: (Math.random() * 1000000).toFixed(0) })
+                    }
                     : false
             }
             loading={false}

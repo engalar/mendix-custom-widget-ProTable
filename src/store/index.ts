@@ -1,4 +1,4 @@
-import { fetchByXpath } from "@jeltemx/mendix-react-widget-utils";
+import { ProColumns } from "@ant-design/pro-components";
 import { autorun, configure, makeObservable, observable, when } from "mobx";
 import { ProTableContainerProps } from "../../typings/ProTableProps";
 import { RowMxObject } from "./objects/RowMxObject";
@@ -8,13 +8,14 @@ configure({ enforceActions: "observed", isolateGlobalState: true, useProxies: "n
 export class Store {
     rows: RowMxObject[] = [];
     sub?: mx.Subscription;
+    columnHeads: any[];
     /**
      * dispose
      */
     public dispose() {}
 
     constructor(public mxOption: ProTableContainerProps) {
-        makeObservable(this, { rows: observable });
+        makeObservable(this, { rows: observable, columnHeads: observable });
 
         this.update();
 
@@ -56,6 +57,12 @@ export class Store {
 
             console.log(data);
         });
+
+        this.columnHeads = mxOption.columns.map(d => ({
+            title: d.columnTitle,
+            dataIndex: d.columnAttribute,
+            valueType: attr2type(mxOption.nodeEntity, d.columnAttribute)
+        }));
     }
     update() {
         if ((this.mxOption.nodeDataSource = "xpath")) {
@@ -73,7 +80,6 @@ export class Store {
 
         const getOptions = {
             callback: (objs: any[]) => {
-                console.log(objs);
                 this.rows = objs.map(d => new RowMxObject(d.getGuid()));
             },
             error: (error: any) => {
@@ -87,4 +93,27 @@ export class Store {
     drawSelection() {
         throw new Error("Method not implemented.");
     }
+}
+
+/**
+ * https://procomponents.ant.design/components/schema#valuetype-%E5%88%97%E8%A1%A8
+ * @param nodeEntity
+ * @param columnAttribute
+ */
+function attr2type(nodeEntity: any, columnAttribute: string): any {
+    //"Enum" | "EnumSet" | "Integer" | "Long" | "Decimal" | "Float" | "Currency" | "HashString" | "Date" | "DateTime" | "Boolean" | "ObjectReference" | "ObjectReferenceSet" | "ObjectReference" | "ObjectReferenceSet"
+    const mxType = mx.meta.getEntity(nodeEntity).getAttributeType(columnAttribute);
+    let result = "text";
+
+    //TODO 实例其它类型映射
+    switch (mxType) {
+        case "DateTime":
+            result = "DateTime";
+            break;
+        case "Enum":
+            break;
+        default:
+            break;
+    }
+    return result;
 }
