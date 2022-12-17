@@ -9,13 +9,18 @@ export class Store {
     rows: RowMxObject[] = [];
     sub?: mx.Subscription;
     columnHeads: any[];
+    data: any[] = [];
     /**
      * dispose
      */
     public dispose() {}
 
     constructor(public mxOption: ProTableContainerProps) {
-        makeObservable(this, { rows: observable, columnHeads: observable });
+        makeObservable(this, {
+            rows: observable,
+            data: observable,
+            columnHeads: observable
+        });
 
         this.update();
 
@@ -47,22 +52,34 @@ export class Store {
         );
 
         autorun(() => {
-            const data = this.rows.map(row => {
-                const d: any = {};
+            this.data = this.rows.map(row => {
+                const d: any = { guid: row.guid };
                 for (const column of mxOption.columns) {
                     d[column.columnAttribute] = row.mxObject?.get(column.columnAttribute);
                 }
                 return d;
             });
-
-            console.log(data);
         });
 
-        this.columnHeads = mxOption.columns.map(d => ({
-            title: d.columnTitle,
-            dataIndex: d.columnAttribute,
-            valueType: attr2type(mxOption.nodeEntity, d.columnAttribute)
-        }));
+        this.columnHeads = mxOption.columns.map(d => {
+            const valueType = attr2type(mxOption.nodeEntity, d.columnAttribute);
+            const columnHead: any = {
+                title: d.columnTitle,
+                dataIndex: d.columnAttribute,
+                valueType
+            };
+            if (valueType == "select") {
+                const valueEnum: any = {};
+                mx.meta
+                    .getEntity(mxOption.nodeEntity)
+                    .getEnumMap(d.columnAttribute)
+                    .forEach(d2 => {
+                        valueEnum[d2.key] = { text: d2.caption, status: d2.key };
+                    });
+                columnHead.valueEnum = valueEnum;
+            }
+            return columnHead;
+        });
     }
     update() {
         if ((this.mxOption.nodeDataSource = "xpath")) {
@@ -108,9 +125,13 @@ function attr2type(nodeEntity: any, columnAttribute: string): any {
     //TODO 实例其它类型映射
     switch (mxType) {
         case "DateTime":
-            result = "DateTime";
+            result = "datetime";
+            break;
+        case "Date":
+            result = "date";
             break;
         case "Enum":
+            result = "select";
             break;
         default:
             break;
