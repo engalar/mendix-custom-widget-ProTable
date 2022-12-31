@@ -1,7 +1,7 @@
-import { ProColumns } from "@ant-design/pro-components";
-import { autorun, configure, makeObservable, observable, when } from "mobx";
+import { action, autorun, configure, makeObservable, observable, runInAction, when } from "mobx";
 import { ProTableContainerProps } from "../../typings/ProTableProps";
 import { RowMxObject } from "./objects/RowMxObject";
+import { commitObject, createObject } from "@jeltemx/mendix-react-widget-utils";
 
 configure({ enforceActions: "observed", isolateGlobalState: true, useProxies: "never" });
 
@@ -19,7 +19,8 @@ export class Store {
         makeObservable(this, {
             rows: observable,
             data: observable,
-            columnHeads: observable
+            columnHeads: observable,
+            saveRow: action
         });
 
         this.update();
@@ -109,6 +110,34 @@ export class Store {
     }
     drawSelection() {
         throw new Error("Method not implemented.");
+    }
+
+    saveRow(jsonObj: any) {
+        if (typeof jsonObj.guid == "number") {
+            //new
+            createObject(this.mxOption.nodeEntity).then(newMxObj => {
+                if (newMxObj) {
+                    this._doCommit(newMxObj, jsonObj);
+                }
+            });
+        } else {
+            //update
+            this._doCommit(mx.data.getCachedObject(jsonObj.guid), jsonObj);
+        }
+    }
+
+    private _doCommit(newMxObj: mendix.lib.MxObject, jsonObj: any) {
+        newMxObj.getAttributes().forEach(value => {
+            if (value in jsonObj) {
+                newMxObj.set(value, jsonObj[value]);
+            }
+        });
+
+        commitObject(newMxObj).then(() => {
+            runInAction(() => {
+                this.data.push(newMxObj);
+            });
+        });
     }
 }
 

@@ -54,7 +54,7 @@ export default function ProTable(props: ProTableContainerProps) {
                             position !== "hidden"
                                 ? {
                                     position: position as "top",
-                                    record: () => ({ guid: (Math.random() * 1000000).toFixed(0) })
+                                    record: () => ({ guid: Math.random() })
                                 }
                                 : false
                         }
@@ -91,6 +91,7 @@ export default function ProTable(props: ProTableContainerProps) {
                             editableKeys,
                             onSave: async (rowKey, data, row) => {
                                 console.log(rowKey, data, row);
+                                store.saveRow(data);
                             },
                             onChange: setEditableRowKeys
                         }}
