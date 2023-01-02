@@ -8,6 +8,8 @@ import { Observer } from "mobx-react";
 import { Store } from "./store";
 import { useUnmount } from "ahooks";
 import { EditableProTable } from "@ant-design/pro-components";
+import { deleteObjectGuid } from "@jeltemx/mendix-react-widget-utils";
+import { runInAction } from "mobx";
 
 const parseStyle = (style = ""): { [key: string]: string } => {
     try {
@@ -75,7 +77,13 @@ export default function ProTable(props: ProTableContainerProps) {
                                 <a
                                     key="delete"
                                     onClick={() => {
-                                        // setDataSource(dataSource.filter(item => item.id !== record.id));
+                                        const idx = store.data.indexOf(record)
+                                        deleteObjectGuid(record.guid).then(msg => {
+                                            console.log(msg);
+                                            runInAction(() => {
+                                                store.rows.splice(idx, 1);
+                                            });
+                                        })
                                     }}
                                 >
                                     删除
