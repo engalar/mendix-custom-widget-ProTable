@@ -134,9 +134,11 @@ export class Store {
         });
 
         commitObject(newMxObj).then(() => {
-            runInAction(() => {
-                this.data.push(newMxObj);
-            });
+            if (typeof jsonObj.guid == "number") {
+                runInAction(() => {
+                    this.rows.push(new RowMxObject(newMxObj.getGuid()));
+                });
+            }
         });
     }
 }
