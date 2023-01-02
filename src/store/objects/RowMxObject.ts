@@ -1,4 +1,5 @@
 import { makeObservable } from "mobx";
+import { Store } from "..";
 import { BaseMxObject } from "./BaseMxObject";
 
 export class RowMxObject extends BaseMxObject {
@@ -7,7 +8,7 @@ export class RowMxObject extends BaseMxObject {
      * @param guid mxobj guid
      * @param idx option index
      */
-    constructor(guid: string) {
+    constructor(private store: Store, guid: string) {
         super(guid);
         makeObservable(this, {});
         this.update();
@@ -17,7 +18,7 @@ export class RowMxObject extends BaseMxObject {
     }
     update() {
         if (this.mxObject) {
-            //todo
+            this.store.rows = [...this.store.rows];
         }
     }
 }
