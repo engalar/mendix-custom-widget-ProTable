@@ -53,12 +53,15 @@ export class Store {
         );
 
         autorun(() => {
-            this.data = this.rows.map(row => {
+            const data = this.rows.map(row => {
                 const d: any = { guid: row.guid };
                 for (const column of mxOption.columns) {
                     d[column.columnAttribute] = row.mxObject?.get(column.columnAttribute);
                 }
                 return d;
+            });
+            runInAction(() => {
+                this.data = data;
             });
         });
 
@@ -98,7 +101,7 @@ export class Store {
 
         const getOptions = {
             callback: (objs: any[]) => {
-                this.rows = objs.map(d => new RowMxObject(this,d.getGuid()));
+                this.rows = objs.map(d => new RowMxObject(this, d.getGuid()));
             },
             error: (error: any) => {
                 console.error(error);
@@ -136,7 +139,7 @@ export class Store {
         commitObject(newMxObj).then(() => {
             if (typeof jsonObj.guid == "number") {
                 runInAction(() => {
-                    this.rows.push(new RowMxObject(this,newMxObj.getGuid()));
+                    this.rows.push(new RowMxObject(this, newMxObj.getGuid()));
                 });
             }
         });

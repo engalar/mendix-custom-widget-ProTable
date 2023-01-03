@@ -11,7 +11,7 @@ export class RowMxObject extends BaseMxObject {
     constructor(private store: Store, guid: string) {
         super(guid);
         makeObservable(this, {});
-        this.update();
+        // this.update();
         this.onChange = () => {
             this.update();
         };
